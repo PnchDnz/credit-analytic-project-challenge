@@ -184,3 +184,41 @@ ORDER BY 1
 
 ---
 
+## Pipeline conceptual
+
+
+```mermaid
+flowchart LR
+
+A[Sistema OLTP] --> B[Proceso de Extracción <br> CDC]
+
+B --> C[Google Cloud Storage <br> Carga inicial]
+
+C --> D[Tablas Staging <br> BigQuery]
+
+D --> E[Transformación de Datos <br> SQL / Python / Dataflow]
+
+E --> F[Data Warehouse <br> BigQuery Modelo Dimensional]
+
+H[Cloud Composer <br> Orquestación con Airflow] --> B
+H --> C
+H --> D
+H --> E
+
+
+```
+
+### Explicación del diagrama
+
+* **OLTP Database** → sistema transaccional de origen.
+* **Extraction Process** → proceso que extrae los datos del OLTP.
+* **Cloud Storage** → capa de landing o raw data.
+* **BigQuery Staging** → tablas temporales para preparar los datos.
+* **Transformations** → limpieza y transformación de datos.
+* **BigQuery Data Warehouse** → modelo dimensional final (hechos y dimensiones).
+* **Cloud Composer (Airflow)** → orquesta todo el pipeline.
+
+---
+
+### Calidad de datos
+
