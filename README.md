@@ -153,5 +153,9 @@ SELECT
     COUNT(DISTINCT CASE WHEN days_late > 30 THEN credit_id END) /
     COUNT(DISTINCT credit_id) * 100 AS "TASA_MORA_>30"
 FROM fact_payments
-ORDER BY 1;
+;
 ```
+
+### Ingreso estimado por interes
+
+### % Default
