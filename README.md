@@ -145,7 +145,6 @@ FROM dim_credit
 ORDER BY 1
 ;
 ```
-* Nota: se agregaron dos sql para monto total colocado, en el archivo sql\01-monto_total_colocado.sql
 
 ### Tasa de mora (creditos con días_late > 30)
 
@@ -159,4 +158,29 @@ FROM fact_payments
 
 ### Ingreso estimado por interes
 
-### % Default
+```sql
+SELECT
+    TO_CHAR(origination_date, 'Month') AS mes,
+    SUM(amount * (interest_rate/100) * (term_months/12)) AS intereses_estimados
+FROM dim_credit
+WHERE TO_CHAR(origination_date, 'YYYY') = '2022'
+GROUP BY TO_CHAR(origination_date, 'Month')
+ORDER BY 1
+;
+```
+
+### % Default por mes de originación
+
+```sql
+SELECT DISTINCT
+    TO_CHAR(origination_date, 'Month') AS mes,
+    SUM(interest_rate) OVER (PARTITION BY TO_CHAR(origination_date, 'Month')) AS total_colocado
+FROM dim_credit
+ORDER BY 1
+;
+```
+
+**Nota**: Para la myoria de los casos se agregarion mas query's y se agregaron otras 2 validaciones que considere oportunas
+
+---
+
