@@ -145,6 +145,7 @@ FROM dim_credit
 ORDER BY 1
 ;
 ```
+* Nota: se agregaron dos sql para monto total colocado, en el archivo sql\01-monto_total_colocado.sql
 
 ### Tasa de mora (creditos con días_late > 30)
 
