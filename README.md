@@ -4,6 +4,12 @@
 
 Proyecto que tiene como objetivo diseñar un modelo analítico de datos que permita analizar los créditos otorgados a PYMES. Se diseña un **modelo dimensinal tipo Data Warehous**e para analizar el desempeño de los creditos otorgados, mediante **consultas SQL y un pipe line conceptual**, aplicando principios de modelados de datos, una arquitectura analitica y calidad de datos.
 
+> [!Nota]
+> Para este caso, se uso como referencia una base de datos en Oracle, tanto los query's como las sentencias esta hecho para una base en Oracle.
+> Los datos Simulados solo se crearon para las tablas <mark>dim_cred</mark> y <mark>fact_payments</mark>
+
+A partir de datos transaccionales de creditos y pagos, se construye un modelo estrella que permite analizar metricas clave del portafolio crediticio, como colocación de créditos, mora, default y estimación de ingresos por intereses.
+
 ---
 
 Las 2 fuentes de datos utilizadas son las siguientes:
@@ -180,12 +186,15 @@ ORDER BY 1
 ;
 ```
 
-**Nota**: Para la myoria de los casos se agregarion mas query's y se agregaron otras 2 validaciones que considere oportunas
+> [!Nota]
+> Para la myoria de los casos se agregarion mas query's y se agregaron otras 2 validaciones que se consideraron oportunas 
+> [sql/05_validaciones_extra.sql](sql/05-validaciones_extra.sql)
 
 ---
 
 ## Pipeline conceptual
 
+* Se agrega un archivo con descripcion conceptual [Pipeline](pipeline/pipeline.py)
 
 ```mermaid
 flowchart LR
@@ -281,3 +290,31 @@ Ejemplos de validacion:
 * Verificar que el pipeline se ejecute diariamente según el calendario programado.
 * Validar que los datos cargados correspondan al periodo esperado (por ejemplo, pagos del dia anterior o el famoso T-1).
 * Generar algun alertas cuando la carga no se complete dentro del tiempo esperado.
+
+---
+
+# Como Ejecutar los Scripts SQL
+
+1. Correr el archivo [DB_scheme.sql](models/DB_schema.sql) que genera las tablas necesarias del modelo
+    > dim_credit | dim_customer | dim_product | dim_credit_status | dim_payment_type
+
+2. Cargar la data (Simulada) [data/](data/)
+
+3. Por ultimo se pueden correr las validaciones que se encuentran en [sql/](sql/) 
+
+---
+
+# Escalar la solucion en producción
+
+Para poder escalar la solucion a produccion, hay que tener en cuenta esto puntos:
+
+* Tener una infraestructura escalable
+* Orquestacion eficiente
+* Gobernar los datos
+* Calidad y monitoreo de Datos
+
+---
+
+# Autor
+
+* Francisco Javier Dominguez Guerrero
