@@ -220,5 +220,64 @@ H --> E
 
 ---
 
-### Calidad de datos
+# Calidad de datos
 
+La calidad de datos se valida en la mayoria etapas del proceso ETL/ELT, para ello se implementan controles basados las dimensiones de calidad.
+Se proponen algunos ejemplos puntuales:
+
+### 1. Precisión (Accuracy)
+
+La precisión asegura que los datos reflejen correctamente la realidad del negocio.
+
+Ejemplos de validacion:
+
+* Verificar que el monto de pago (`payment_amount`) coincida con el valor registrado.
+* Validar que los días de atraso (`days_late`) correspondan correctamente a la diferencia entre la fecha de pago y la fecha de vencimiento.
+
+### 2. Validez
+
+Garantiza que los datos cumplan con formatos y reglas de negocio definidas.
+
+Ejemplos de validacion:
+
+* Validar que `payment_amount` sea mayor que 0.
+* Verificar que las fechas (`payment_date`) tengan un formato válido y no sean futuras.
+* Confirmar que `days_late` no tenga valores negativos.
+
+### 3. Completitud (Integridad)
+
+Asegura que todos los datos necesarios estén presentes y sin valores faltantes en campos críticos.
+
+Ejemplos de validacion:
+
+* Verificar que campos clave como `credit_id`, `customer_id` y `payment_date` no contengan valores nulos.
+* Validar que cada credito tenga al menos un registro en la tabla de pagos cuando corresponda.
+* Controlar que todos los registros esperados del dia se hayan cargado correctamente.
+
+### 4. Consistencia
+
+Asegura que los datos sean coherentes entre diferentes tablas o sistemas.
+
+Ejemplos de validacion:
+
+* Confirmar que todos los `credit_id` exixstentes en <mark>fact_payments</mark> existan en <mark>dim_credit</mark>.
+* Comparar totales entre tablas de staging y tablas finales para detectar discrepancias.
+
+### 5. Unicidad
+
+Verificar que no existan registros duplicados que afecten el analisis.
+
+Ejemplos de validacion:
+
+* Verificar que la combinación `credit_id` + `payment_date` + `amount_paid` sea unica en la tabla fact_payments.
+* Implementar controles que detecten duplicados durante la carga incremental.
+
+### 6. Puntualidad (Actualidad)
+
+Asegura que los datos estén disponibles y actualizados en el momento necesario para su analisis.
+
+Ejemplos de validacion:
+
+* Verificar que el pipeline se ejecute diariamente según el calendario programado.
+* Validar que los datos cargados correspondan al periodo esperado (por ejemplo, pagos del dia anterior o el famoso T-1).
+* Generar algun alertas cuando la carga no se complete dentro del tiempo esperado.
